@@ -33,8 +33,38 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              Config.clear();
-              Navigator.pushReplacementNamed(context, '/login');
+              showDialog(
+                context: context,
+                builder: (BuildContext ctx) {
+                  return AlertDialog(
+                    title: const Text('Cerrar sesión'),
+                    content: Text('¿Estás seguro de que deseas salir?'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Cancelar'),
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text(
+                          'Salir',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        onPressed: () {
+                          Config.clear();
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/login',
+                            (Route<dynamic> route) => false,
+                          );
+                          Navigator.pushReplacementNamed(context, '/login');
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
